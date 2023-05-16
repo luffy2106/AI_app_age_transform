@@ -1,4 +1,4 @@
-name: venv
+name: age_venv
 channels:
   - conda-forge
   - defaults
