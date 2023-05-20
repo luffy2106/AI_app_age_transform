@@ -8,9 +8,9 @@ Verify install:
 
 # Install virtual environment
 Install
-- conda env create -f environment/sam_env.yaml
+- conda env create -f environment/kien_env.yaml
 Activate
-- conda activate venv
+- conda activate age_venv
 
 
 # Install package to run notebook 
