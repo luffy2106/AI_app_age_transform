@@ -64,8 +64,9 @@ def main():
 
     logger.debug("The config is {}".format(config))
     
-    # path = MODEL_PATHS[EXPERIMENT_TYPE]
-    # download_command = get_download_model_command(file_id=path["id"], file_name=path["name"])
+    EXPERIMENT_TYPE = 'ffhq_aging'
+    path = MODEL_PATHS[EXPERIMENT_TYPE]
+    download_command = get_download_model_command(file_id=path["id"], file_name=path["name"])
     
     # Load Pretrained Model
     EXPERIMENT_ARGS = EXPERIMENT_DATA_ARGS[EXPERIMENT_TYPE]

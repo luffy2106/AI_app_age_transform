@@ -33,4 +33,5 @@ dependencies:
     - tensorboard==2.2.1
     - torch==1.6.0
     - torchvision==0.7.0
-prefix: ~/anaconda3/envs/kien_env
+    - dlib==19.24.1
+prefix: ~/anaconda3/envs/age_env
