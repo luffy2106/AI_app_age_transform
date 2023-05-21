@@ -39,7 +39,7 @@ EXPERIMENT_DATA_ARGS = {
 def run_alignment(image_path, detect_face_config):
     predictor = dlib.shape_predictor(detect_face_config)
     aligned_image = align_face(filepath=image_path, predictor=predictor) 
-    print("Aligned image has shape: {}".format(aligned_image.size))
+    logger.info("Aligned image has shape: {}".format(aligned_image.size))
     return aligned_image 
 
 def run_on_batch(inputs, net):
@@ -62,11 +62,11 @@ def main():
     args = parser.parse_args()
     config = vars(args)
 
-    logger.debug("The config is {}".format(config))
+    logger.info("The config is {}".format(config))
     
-    EXPERIMENT_TYPE = 'ffhq_aging'
-    path = MODEL_PATHS[EXPERIMENT_TYPE]
-    download_command = get_download_model_command(file_id=path["id"], file_name=path["name"])
+    # EXPERIMENT_TYPE = 'ffhq_aging'
+    # path = MODEL_PATHS[EXPERIMENT_TYPE]
+    # download_command = get_download_model_command(file_id=path["id"], file_name=path["name"])
     
     # Load Pretrained Model
     EXPERIMENT_ARGS = EXPERIMENT_DATA_ARGS[EXPERIMENT_TYPE]
@@ -83,7 +83,7 @@ def main():
     net = pSp(opts)
     net.eval()
     net.cuda()
-    logger.debug('Model successfully loaded!')
+    logger.success('Model successfully loaded!')
 
 
     # Set up input
@@ -108,7 +108,7 @@ def main():
     # for each age transformed age, we'll concatenate the results to display them side-by-side
     results = np.array(aligned_image.resize((1024, 1024)))
 
-    logger.debug(f"Running on target age: {age_transformers.target_age}")
+    logger.info(f"Running on target age: {age_transformers.target_age}")
     with torch.no_grad():
         input_image_age = [age_transformers(input_image.cpu()).to('cuda')]
         input_image_age = torch.stack(input_image_age)

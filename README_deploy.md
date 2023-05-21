@@ -8,7 +8,7 @@ Verify install:
 
 # Install virtual environment
 Install
-- conda env create -f environment/kien_env.yaml
+- conda env create -f environment/kien_env_37.yaml
 Activate
 - conda activate age_venv
 
@@ -43,5 +43,5 @@ Note that some old OS system does not support ninja-linux. In that case, install
 - sudo apt-get install cmake
 
 # Running
-
-python main.py 
+You can change the age number as you want, note that the age number should be integer
+- python scripts/inference.py --age 40
