@@ -11,6 +11,10 @@ Install
 - conda env create -f environment/kien_env_37.yaml
 Activate
 - conda activate age_venv
+Install jinja2 to run template on fastAPI
+- pip install jinja2
+Install multipart to take form data request
+- pip install python-multipart
 
 # Download model
 
@@ -45,3 +49,6 @@ Note that some old OS system does not support ninja-linux. In that case, install
 # Running
 You can change the age number as you want, note that the age number should be integer
 - python scripts/inference.py --age 40
+
+# Deploy to fastAPI
+gunicorn scripts.main:app -w 1 --timeout 180 -k uvicorn.workers.UvicornWorker -b "0.0.0.0:8000"

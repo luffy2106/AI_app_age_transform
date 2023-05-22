@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Upload File and Enter Age</title>
+</head>
+
+<body>
+    <h1>Upload an Image and Enter Age</h1>
+    <form action="/submit" method="post" enctype="multipart/form-data">
+        <label for="age">Enter Age:</label>
+        <input type="number" name="age" id="age" min="1" max="90"><br><br>
+        <label for="file">Upload File:</label>
+        <input type="file" name="file" id="file"><br><br>
+        <input type="submit" value="Submit">
+    </form>
+</body>
+
+</html>
