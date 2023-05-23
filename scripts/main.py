@@ -79,28 +79,6 @@ logger.add(
     format="<green>{time:YYYY-MM-DD HH:mm:ss}</green> | <level>{level}</level> | <cyan>{message}</cyan>",
 )
 
-
-# @app.get("/", response_class=HTMLResponse)
-# async def root():
-#     return """
-#         <html>
-#             <head>
-#                 <title>Upload a File and choose an age</title>
-#             </head>
-#             <body>
-#                 <form action="/submit" method="post" enctype="multipart/form-data">
-#                     <label for="age">Fill in an age you want to see:</label>
-#                     <input type="age" id="age" name="age" min="1" max="90">
-#                     <br>
-#                     <label for="file">Upload a file:</label>
-#                     <input type="file" id="file" name="file">
-#                     <br>
-#                     <button type="submit">Submit</button>
-#                 </form>
-#             </body>
-#         </html>
-#     """
-# Define application
 app = FastAPI()
 app.mount("/static", StaticFiles(directory="static"), name="static")
 templates = Jinja2Templates(directory="./static/templates")
@@ -170,8 +148,3 @@ async def predict(request: Request, age: int = Form(...), file: UploadFile = Fil
         logger.exception("Error occur while run the prediction", e)
 
 
-# @app.get("/show_results")
-# async def main():
-#     img_path = Path("age_transform.jpg")
-#     if img_path.is_file():
-#         return FileResponse("age_transform.jpg")

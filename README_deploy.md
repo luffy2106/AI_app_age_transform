@@ -3,6 +3,7 @@ Download and Install anaconda in /tmp
 - cd /tmp
 - wget https://repo.anaconda.com/archive/Anaconda3-2023.03-1-Linux-x86_64.sh
 - bash Anaconda3-2023.03-1-Linux-x86_64.sh 
+- . anaconda3/bin/activate
 Verify install:
 - conda --version
 
@@ -52,3 +53,13 @@ You can change the age number as you want, note that the age number should be in
 
 # Deploy to fastAPI
 gunicorn scripts.main:app -w 1 --timeout 180 -k uvicorn.workers.UvicornWorker -b "0.0.0.0:8000"
+
+
+# Run with docker
+1. Build the image
+
+docker build -t age_transform -f docker/Dockerfile .
+
+2. Run the container
+
+docker run -d --gpus all age_transform:latest
