@@ -63,3 +63,9 @@ docker build -t age_transform -f docker/Dockerfile .
 2. Run the container
 
 docker run -d --gpus all age_transform:latest
+
+
+
+Reference :
+
+https://pythonspeed.com/articles/activate-conda-dockerfile/
