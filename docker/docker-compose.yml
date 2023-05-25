@@ -1,0 +1,11 @@
+services:
+  test:
+    image: age_transform:latest
+    command: ninja -v
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 1
+              capabilities: [ gpu ]
