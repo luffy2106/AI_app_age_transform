@@ -55,6 +55,11 @@ You can change the age number as you want, note that the age number should be in
 gunicorn scripts.main:app -w 1 --timeout 180 -k uvicorn.workers.UvicornWorker -b "0.0.0.0:8000"
 
 
+# Install Nvidia Container Toolkit
+
+https://github.com/NVIDIA/nvidia-docker
+
+sudo nvidia-ctk runtime configure
 # Run with docker
 1. Build the image
 

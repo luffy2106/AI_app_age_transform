@@ -1,4 +1,4 @@
-FROM nvidia/cuda:11.8.0-devel-ubuntu22.04
+FROM nvidia/cuda:11.3.0-cudnn8-devel-ubuntu20.04
 
 
 # Install necessary dependencies
