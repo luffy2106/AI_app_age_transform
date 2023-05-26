@@ -146,5 +146,3 @@ async def predict(request: Request, age: int = Form(...), file: UploadFile = Fil
         )
     except Exception as e:
         logger.exception("Error occur while run the prediction", e)
-
-
