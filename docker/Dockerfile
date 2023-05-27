@@ -1,5 +1,9 @@
 FROM nvidia/cuda:11.3.0-cudnn8-devel-ubuntu20.04
 
+# # Set the image name label
+# LABEL name="age_transform"
+
+
 # Set the timezone environment variable
 ENV TZ=Europe/London
 
@@ -51,12 +55,13 @@ SHELL ["conda", "run", "-n", "age_venv_37", "/bin/bash", "-c"]
 ENV PATH="/opt/conda/envs/age_venv_37/bin:$PATH"
 
 # Test virutal environenment 
-RUN echo "Make sure gunicorn is installed:"
-RUN python -c "import gunicorn"
+# RUN echo "Make sure gunicorn is installed:"
+# RUN python -c "import gunicorn"
 
 # The container is listening on port 6080
 EXPOSE 6080
 
 # Run the API in docker
-CMD ["gunicorn", "scripts.main:app",  "-w", "1", "--timeout", "180", "-k", "uvicorn.workers.UvicornWorker", "-b", "0.0.0.0"]
-
+# CMD ["gunicorn", "scripts.main:app",  "-w", "1", "--timeout", "180", "-k", "uvicorn.workers.UvicornWorker", "-b", "0.0.0.0"]
+# CMD ["uvicorn", "scripts.main:app", "--host", "0.0.0.0", "--port", "7090"]
+CMD ["uvicorn", "scripts.main:app", "--host", "0.0.0.0", "--port", "7090"]

@@ -5,13 +5,14 @@ services:
       context: .
       dockerfile: ./docker/Dockerfile
     image: age_transform
-    command: gunicorn scripts.main:app -w 1 --timeout 180 -k uvicorn.workers.UvicornWorker -b "0.0.0.0:6090"
+    command: uvicorn scripts.main:app --host 0.0.0.0 --port 7090
+    # command: gunicorn scripts.main:app -w 1 --timeout 180 -k uvicorn.workers.UvicornWorker -b "0.0.0.0:6090"
     ports:
-      - "6090:6080"
-    deploy:
-      resources:
-        reservations:
-          devices:
-            - driver: nvidia
-              count: 1
-              capabilities: [ gpu ]
+      - "7090:6080"
+    # deploy:
+    #   resources:
+    #     reservations:
+    #       devices:
+    #         - driver: nvidia
+    #           count: 1
+    #           capabilities: [ gpu ]

@@ -72,6 +72,10 @@ python scripts/inference.py --age 40
 gunicorn scripts.main:app -w 1 --timeout 180 -k uvicorn.workers.UvicornWorker -b "0.0.0.0:6080"
 ```
 
+uvicorn scripts.main:app -w 1 --timeout 180 -k uvicorn.workers.UvicornWorker -b "0.0.0.0:6080"
+
+
+uvicorn scripts.main:app --host 0.0.0.0 --port 7000
 # For Deployment
 
 
@@ -97,7 +101,9 @@ docker build -t age_transform -f docker/Dockerfile .
 
 docker run -d --gpus all age_transform:latest
 
-docker run -p 6080:6080 -d --gpus all age_transform:latest
+docker run -p 6090:6080 -d --gpus all age_transform:latest
+
+uvicorn scripts.main:app --host 0.0.0.0 --port 7000
 
 3. Build docker image and run the container in the background
 
