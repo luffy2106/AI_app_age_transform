@@ -64,4 +64,4 @@ EXPOSE 6080
 # Run the API in docker
 # CMD ["gunicorn", "scripts.main:app",  "-w", "1", "--timeout", "180", "-k", "uvicorn.workers.UvicornWorker", "-b", "0.0.0.0"]
 # CMD ["uvicorn", "scripts.main:app", "--host", "0.0.0.0", "--port", "7090"]
-CMD ["uvicorn", "scripts.main:app", "--host", "0.0.0.0", "--port", "7090"]
+# CMD ["uvicorn", "scripts.main:app", "--host", "0.0.0.0", "--port", "7090"]
