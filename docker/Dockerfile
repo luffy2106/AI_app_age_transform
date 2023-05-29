@@ -1,5 +1,6 @@
-FROM nvidia/cuda:11.3.0-cudnn8-devel-ubuntu20.04
+#FROM nvidia/cuda:11.3.0-cudnn8-devel-ubuntu20.04
 
+FROM nvidia/cuda:11.4.1-cudnn8-devel-ubuntu20.04
 # # Set the image name label
 # LABEL name="age_transform"
 
