@@ -112,3 +112,14 @@ docker-compose up -d
 Reference :
 
 https://pythonspeed.com/articles/activate-conda-dockerfile/
+
+
+
+
+
+
+Install  lib to avoid conflit(setup.py ...)
+
+https://bobbyhadz.com/blog/python-setup-py-bdist-wheel-did-not-run-successfully
+
+sudo apt-get install libblas-dev liblapack-dev libatlas-base-dev gfortran

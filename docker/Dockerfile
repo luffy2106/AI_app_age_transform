@@ -24,6 +24,7 @@ RUN    apt-get update \
     && apt-get -y install python3-pip \
     && apt-get install -y libgl1-mesa-dev \
     && apt-get install -y cmake \
+    && apt-get install python3.7-dev \
     # && apt-get install -y ninja-build \
     && apt install unzip \
     && apt-get clean
@@ -45,15 +46,21 @@ ENV PATH="/opt/conda/bin:$PATH"
 COPY . /app/age_transform_api
 WORKDIR /app/age_transform_api
 
+
+# Install package
+RUN pip install -r requirements.txt
+
+
 # Create a new Conda environment
 # RUN conda create --name myenv
-RUN conda env create -f environment/kien_env_37.yaml
+# RUN conda env create -f environment/kien_env_37.yaml
 
 # Activate the Conda environment
-SHELL ["conda", "run", "-n", "age_venv_37", "/bin/bash", "-c"]
+#SHELL ["conda", "run", "-n", "age_venv_37", "/bin/bash", "-c"]
+
 
 # Set the environment variables for conda virtual environment
-ENV PATH="/opt/conda/envs/age_venv_37/bin:$PATH"
+# ENV PATH="/opt/conda/envs/age_venv_37/bin:$PATH"
 
 # Test virutal environenment 
 # RUN echo "Make sure gunicorn is installed:"
