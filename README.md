@@ -78,19 +78,28 @@ uvicorn scripts.main:app -w 1 --timeout 180 -k uvicorn.workers.UvicornWorker -b 
 uvicorn scripts.main:app --host 0.0.0.0 --port 7000
 # For Deployment
 
+## 3.0 Enable GPU on docker(in case your service use GPU)
+Docker doesn’t even add GPUs to containers by default so a plain docker run won’t see your hardware at all. You need to configure it
+- Make sure you’ve got the NVIDIA drivers working properly on your host before you continue with your Docker configuration. You should be able to successfully run nvidia-s$- Adding the NVIDIA Container Toolkit to your host:
+```
+distribution=$(. /etc/os-release;echo $ID$VERSION_ID)
+   && curl -s -L https://nvidia.github.io/nvidia-docker/gpgkey | sudo apt-key add -
+   && curl -s -L https://nvidia.github.io/nvidia-docker/$distribution/nvidia-docker.list | sudo tee /etc/apt/sources.list.d/nvidia-docker.list
+```
+- Install the nvidia-docker2 package on your host:
+```
+apt-get update
+apt-get install -y nvidia-docker2
+```
+- Test if gpu enable sucessfully in docker:
+```
+docker run -it --gpus all nvidia/cuda:11.4.0-base-ubuntu20.04 nvidia-smi
+```
+You shoud see your GPU’s name, driver version, and CUDA version
 
-# Install Nvidia Container Toolkit
-This step is necessary to connect your GPU to docker
+Reference :
 
-https://github.com/NVIDIA/nvidia-docker
-
-sudo nvidia-ctk runtime configure
-
-Test NVIDIA docker:
-sudo docker run --rm --gpus all nvidia/cuda:10.1-base nvidia-smi
-
-Other reference :
-https://gitlab.com/dataScienceAssystem/aramco/-/tree/E-cataloging-v2-final?ref_type=heads
+https://shorturl.at/ioqAP
 
 # Run with docker
 1. Build the image
