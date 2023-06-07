@@ -1,6 +1,6 @@
 #FROM nvidia/cuda:11.3.0-cudnn8-devel-ubuntu20.04
 
-FROM nvidia/cuda:11.4.1-cudnn8-devel-ubuntu20.04
+FROM nvidia/cuda:11.3.0-cudnn8-devel-ubuntu18.04
 # # Set the image name label
 # LABEL name="age_transform"
 
@@ -16,16 +16,16 @@ ENV DEBIAN_FRONTEND=noninteractive
 # Install necessary dependencies
 RUN    apt-get update \
     && apt-get install -y software-properties-common \
-    && apt-get install wget \
+    && apt-get install -y wget \
     && apt-get update \
-    && add-apt-repository ppa:deadsnakes/ppa \
+    && add-apt-repository -y ppa:deadsnakes/ppa \
     && apt-get update \
     && apt-get install -y --no-install-recommends build-essential \
     && apt-get -y install python3-pip \
     && apt-get install -y libgl1-mesa-dev \
     && apt-get install -y cmake \
     # && apt-get install -y ninja-build \
-    && apt install unzip \
+    && apt install -y unzip \
     && apt-get clean
 
 # Download and install Miniconda
@@ -60,9 +60,9 @@ ENV PATH="/opt/conda/envs/age_venv_37/bin:$PATH"
 # RUN python -c "import gunicorn"
 
 # The container is listening on port 6080
-EXPOSE 6080
+# EXPOSE 6080
 
 # Run the API in docker
 # CMD ["gunicorn", "scripts.main:app",  "-w", "1", "--timeout", "180", "-k", "uvicorn.workers.UvicornWorker", "-b", "0.0.0.0"]
 # CMD ["uvicorn", "scripts.main:app", "--host", "0.0.0.0", "--port", "7090"]
-CMD ["uvicorn", "scripts.main:app", "--host", "0.0.0.0", "--port", "7090"]
+# CMD ["gunicorn", "scripts.main:app", "--preload", "--b", "0.0.0.0", "--port", "7090"]

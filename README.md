@@ -1,17 +1,31 @@
 
 
-# For Development
+# For Development(Only apply for Linux or WSL2 window)
+### Install cuda to enable GPU in WSL
+wget https://developer.download.nvidia.com/compute/cuda/repos/wsl-ubuntu/x86_64/cuda-keyring_1.0-1_all.deb
+sudo dpkg -i cuda-keyring_1.0-1_all.deb
+sudo apt-get update
+sudo apt-get -y install cuda
+
+Cheking:
+If you see cuda folder in usr/local, and you can see cuda version by the following command, then you are success:
+```
+nvidia-smi
+```
 
 ### Install conda
-1. Download and Install anaconda in /tmp 
+1. Download and Install anaconda 
+1.1 Mini version
 ```
-wget -P /tmp https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh && bash Miniconda3-latest-Linux-x86_64.sh
+sudo wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh \
+    && bash Miniconda3-latest-Linux-x86_64.sh -b -p conda 
 ```
-2. Activate conda
+
+1.2 Activate conda
 ```
-. anaconda3/bin/activate
+. conda/bin/activate
 ```
-3. Verify install:
+1.3 Verify install:
 ```
 conda --version
 ```
@@ -27,6 +41,11 @@ conda activate age_venv
 ```
 
 ### Download model
+Create folder to store model:
+```
+mkdir pretrained_models
+```
+
 Download age transform model:
 ```
 wget --load-cookies /tmp/cookies.txt "https://docs.google.com/uc?export=download&confirm=$(wget --quiet --save-cookies /tmp/cookies.txt --keep-session-cookies --no-check-certificate 'https://docs.google.com/uc?export=download&id=1XyumF6_fdAxFmxpFcmPf-q84LU_22EMC' -O- | sed -rn 's/.*confirm=([0-9A-Za-z_]+).*/\1\n/p')&id=1XyumF6_fdAxFmxpFcmPf-q84LU_22EMC" -O ./pretrained_models/sam_ffhq_aging.pt && rm -rf /tmp/cookies.txt
@@ -77,22 +96,32 @@ uvicorn scripts.main:app -w 1 --timeout 180 -k uvicorn.workers.UvicornWorker -b 
 
 uvicorn scripts.main:app --host 0.0.0.0 --port 7000
 # For Deployment
+## 3.0 Enable GPU on docker(in case your service use GPU)
+Docker doesn’t even add GPUs to containers by default so a plain docker run won’t see your hardware at all. You need to configure it
+- Make sure you’ve got the NVIDIA drivers working properly on your host before you continue with your Docker configuration. You should be able to successfully run nvidia-smi and see your GPU’s name, driver version, and CUDA version
+- Adding the NVIDIA Container Toolkit to your host:
+```
+distribution=$(. /etc/os-release;echo $ID$VERSION_ID) 
+   && curl -s -L https://nvidia.github.io/nvidia-docker/gpgkey | sudo apt-key add - 
+   && curl -s -L https://nvidia.github.io/nvidia-docker/$distribution/nvidia-docker.list | sudo tee /etc/apt/sources.list.d/nvidia-docker.list
+```
+- Install the nvidia-docker2 package on your host:
+```
+apt-get update
+apt-get install -y nvidia-docker2
+```
+- Test if gpu enable sucessfully in docker:
+```
+docker run -it --gpus all nvidia/cuda:11.4.0-base-ubuntu20.04 nvidia-smi
+```
+You shoud see your GPU’s name, driver version, and CUDA version
 
+Reference:
+```
+https://www.howtogeek.com/devops/how-to-use-an-nvidia-gpu-with-docker-containers/
+```
 
-# Install Nvidia Container Toolkit
-This step is necessary to connect your GPU to docker
-
-https://github.com/NVIDIA/nvidia-docker
-
-sudo nvidia-ctk runtime configure
-
-Test NVIDIA docker:
-sudo docker run --rm --gpus all nvidia/cuda:10.1-base nvidia-smi
-
-Other reference :
-https://gitlab.com/dataScienceAssystem/aramco/-/tree/E-cataloging-v2-final?ref_type=heads
-
-# Run with docker
+## Run with docker
 1. Build the image
 
 docker build -t age_transform -f docker/Dockerfile .
