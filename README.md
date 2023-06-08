@@ -1,46 +1,45 @@
 
 
 # For Development(Only apply for Linux or WSL2 window)
-### Install cuda to enable GPU in WSL
+### 1. Install cuda to enable GPU in WSL
 wget https://developer.download.nvidia.com/compute/cuda/repos/wsl-ubuntu/x86_64/cuda-keyring_1.0-1_all.deb
 sudo dpkg -i cuda-keyring_1.0-1_all.deb
 sudo apt-get update
 sudo apt-get -y install cuda
 
-Cheking:
+Checking:
 If you see cuda folder in usr/local, and you can see cuda version by the following command, then you are success:
 ```
 nvidia-smi
 ```
 
-### Install conda
-1. Download and Install anaconda 
-1.1 Mini version
+### 2. Install conda
+2.1. Download and Install anaconda 
+2.1.1 Mini version
 ```
 sudo wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh \
     && bash Miniconda3-latest-Linux-x86_64.sh -b -p conda 
 ```
-
-1.2 Activate conda
+2.1.2 Activate conda
 ```
 . ~/conda/bin/activate
 ```
-1.3 Verify install:
+2.1.3 Verify install:
 ```
 conda --version
 ```
+If you see conda version, then you are sucessful
 
-### Install virtual environment
-1. Install
+### 3. Install virtual environment
+3.1. Install
 ```
 conda env create -f environment/kien_env_37.yaml
 ```
-2. Activate virtual environment
+3.2. Activate virtual environment
 ```
 conda activate age_venv_37
 ```
-
-### Download model
+### 4. Download model
 Create folder to store model:
 ```
 mkdir pretrained_models
@@ -51,13 +50,13 @@ Download age transform model:
 wget --load-cookies /tmp/cookies.txt "https://docs.google.com/uc?export=download&confirm=$(wget --quiet --save-cookies /tmp/cookies.txt --keep-session-cookies --no-check-certificate 'https://docs.google.com/uc?export=download&id=1XyumF6_fdAxFmxpFcmPf-q84LU_22EMC' -O- | sed -rn 's/.*confirm=([0-9A-Za-z_]+).*/\1\n/p')&id=1XyumF6_fdAxFmxpFcmPf-q84LU_22EMC" -O ./pretrained_models/sam_ffhq_aging.pt && rm -rf /tmp/cookies.txt
 ```
 
-### Download face detector lib
+### 5. Download face detector lib
 This is dlib(deep learning library) of python to recognize the facial points of any person's face.
 ```
 wget "https://github.com/italojs/facial-landmarks-recognition/raw/master/shape_predictor_68_face_landmarks.dat"
 ```
 
-### Install package to run notebook (optional)
+### 6. Install package to run notebook (optional, please skip it if you are doing deployment)
 If you want to add virutal environment to jupyter
 - source activate myenv
 - pip install ipykernel
@@ -66,8 +65,8 @@ If you want to see logs of jupyter in vscode :
 - ctlr + shift + P => jupyter : show output
 
 
-### Install package to build dlib(choose one option)
-1. Using ninja-linux(faster than CMAKE)
+### 7. Install package to build dlib(choose one option)
+7.1. Using ninja-linux(faster than CMAKE)
 ```
 wget https://github.com/ninja-build/ninja/releases/download/v1.8.2/ninja-linux.zip 
 && sudo apt install unzip
@@ -77,26 +76,34 @@ wget https://github.com/ninja-build/ninja/releases/download/v1.8.2/ninja-linux.z
 
 Note that some old OS system does not support ninja-linux. In that case, install cmake instead.
 
-2. Using cmake 
+7.2. Using cmake 
 ```
 sudo apt-get install cmake
 ```
-### Running
+### 8. Running
 You can change the age number as you want, note that the age number should be integer
 ```
 python scripts/inference.py --age 40
 ```
-### Deploy to fastAPI
+You could see the result in folder <mark>output</mark>
+### 9. Deploy to fastAPI
 ```
-gunicorn scripts.main:app -w 1 --timeout 180 -k uvicorn.workers.UvicornWorker -b "0.0.0.0:6080"
+uvicorn scripts.main:app --host 0.0.0.0 --reload --port 6080
 ```
 
-uvicorn scripts.main:app -w 1 --timeout 180 -k uvicorn.workers.UvicornWorker -b "0.0.0.0:6080"
-
-
-uvicorn scripts.main:app --host 0.0.0.0 --port 7000
 # For Deployment
-## 3.0 Enable GPU on docker(in case your service use GPU)
+## 1. Install linux OS system
+
+Install Ubuntu 18.04 or 20.04 or \
+
+Windows Subsystem for Linux(WSL) if you are using window. See the tutorial in this <a href="https://learn.microsoft.com/en-us/windows/wsl/install" target="_blank">link</a>
+
+Remember that Docker only support WSL 2, so you should make sure that you installed WSL 2, you can check you are on which version by:
+```
+wsl -l -v
+```
+
+## 2. Enable GPU on docker(in case your service use GPU)
 Docker doesn’t even add GPUs to containers by default so a plain docker run won’t see your hardware at all. You need to configure it
 - Make sure you’ve got the NVIDIA drivers working properly on your host before you continue with your Docker configuration. You should be able to successfully run nvidia-smi and see your GPU’s name, driver version, and CUDA version
 - Adding the NVIDIA Container Toolkit to your host:
@@ -121,23 +128,22 @@ Reference:
 https://www.howtogeek.com/devops/how-to-use-an-nvidia-gpu-with-docker-containers/
 ```
 
-## Run with docker
+## 3. Run with docker
 1. Build the image
-
+```
 docker build -t age_transform -f docker/Dockerfile .
-
-2. Run the container
-
-docker run -d --gpus all age_transform:latest
-
-docker run -p 6090:6080 -d --gpus all age_transform:latest
-
-uvicorn scripts.main:app --host 0.0.0.0 --port 7000
-
-3. Build docker image and run the container in the background
-
+```
+2. Build and run by docker compose
+```
 docker-compose up -d
+```
 
-Reference :
 
-https://pythonspeed.com/articles/activate-conda-dockerfile/
+Few notes on this project:
+- There are some dependencies in files YAML which can not convert to requirements.txt, because there dependencices managed by conda only
+- You can run the tool by unicorn, but if you "-k uvicorn.workers.UvicornWorker" and "--timeout 180" the program will show error, because uvicorn need to set up the process to run the tool and the default timeout of the command is short than we expected.
+```
+gunicorn scripts.main:app -w 1 --preload --timeout 180 -k uvicorn.workers.UvicornWorker -b "0.0.0.0:6080" 
+```
+- If you bind port in docker compose file and set up command in docker compose, no need to set up in dockerfile anymore. 
+
