@@ -1,6 +1,6 @@
 
 
-# For Development(Only apply for Linux or WSL2 window)
+# For Development(Only apply for Linux or WSL2 window), skip it you want to deploy the project
 ### 1. Install cuda to enable GPU in WSL
 wget https://developer.download.nvidia.com/compute/cuda/repos/wsl-ubuntu/x86_64/cuda-keyring_1.0-1_all.deb
 sudo dpkg -i cuda-keyring_1.0-1_all.deb
@@ -14,28 +14,27 @@ nvidia-smi
 ```
 
 ### 2. Install conda
-2.1. Download and Install anaconda 
-2.1.1 Mini version
+Download and Install anaconda(mini version) 
 ```
 sudo wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh \
     && bash Miniconda3-latest-Linux-x86_64.sh -b -p conda 
 ```
-2.1.2 Activate conda
+Activate conda
 ```
 . ~/conda/bin/activate
 ```
-2.1.3 Verify install:
+Verify install:
 ```
 conda --version
 ```
 If you see conda version, then you are sucessful
 
 ### 3. Install virtual environment
-3.1. Install
+Install
 ```
 conda env create -f environment/kien_env_37.yaml
 ```
-3.2. Activate virtual environment
+Activate virtual environment
 ```
 conda activate age_venv_37
 ```
@@ -44,12 +43,10 @@ Create folder to store model:
 ```
 mkdir pretrained_models
 ```
-
 Download age transform model:
 ```
 wget --load-cookies /tmp/cookies.txt "https://docs.google.com/uc?export=download&confirm=$(wget --quiet --save-cookies /tmp/cookies.txt --keep-session-cookies --no-check-certificate 'https://docs.google.com/uc?export=download&id=1XyumF6_fdAxFmxpFcmPf-q84LU_22EMC' -O- | sed -rn 's/.*confirm=([0-9A-Za-z_]+).*/\1\n/p')&id=1XyumF6_fdAxFmxpFcmPf-q84LU_22EMC" -O ./pretrained_models/sam_ffhq_aging.pt && rm -rf /tmp/cookies.txt
 ```
-
 ### 5. Download face detector lib
 This is dlib(deep learning library) of python to recognize the facial points of any person's face.
 ```
@@ -58,9 +55,11 @@ wget "https://github.com/italojs/facial-landmarks-recognition/raw/master/shape_p
 
 ### 6. Install package to run notebook (optional, please skip it if you are doing deployment)
 If you want to add virutal environment to jupyter
-- source activate myenv
-- pip install ipykernel
-- python -m ipykernel install --user --name myenv --display-name "Python (myenv)"
+```
+source activate myenv
+pip install ipykernel
+python -m ipykernel install --user --name myenv --display-name "Python (myenv)"
+```
 If you want to see logs of jupyter in vscode : 
 - ctlr + shift + P => jupyter : show output
 
@@ -129,17 +128,16 @@ https://www.howtogeek.com/devops/how-to-use-an-nvidia-gpu-with-docker-containers
 ```
 
 ## 3. Run with docker
-1. Build the image
+Build the image
 ```
 docker build -t age_transform -f docker/Dockerfile .
 ```
-2. Build and run by docker compose
+Build and run by docker compose
 ```
 docker-compose up -d
 ```
 
-
-Few notes on this project:
+# Few notes on this project(For development only)
 - There are some dependencies in files YAML which can not convert to requirements.txt, because there dependencices managed by conda only
 - You can run the tool by unicorn, but if you "-k uvicorn.workers.UvicornWorker" and "--timeout 180" the program will show error, because uvicorn need to set up the process to run the tool and the default timeout of the command is short than we expected.
 ```
