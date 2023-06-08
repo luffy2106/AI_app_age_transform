@@ -17,11 +17,11 @@ nvidia-smi
 Download and Install anaconda(mini version) 
 ```
 sudo wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh \
-    && bash Miniconda3-latest-Linux-x86_64.sh -b -p conda 
+    && bash Miniconda3-latest-Linux-x86_64.sh -b -p /tmp/conda 
 ```
 Activate conda
 ```
-. ~/conda/bin/activate
+. /tmp/conda/bin/activate
 ```
 Verify install:
 ```
@@ -102,7 +102,13 @@ Remember that Docker only support WSL 2, so you should make sure that you instal
 wsl -l -v
 ```
 
-## 2. Enable GPU on docker(in case your service use GPU)
+## 2. Install docker
+Follow the tutorial in this link :
+```
+https://docs.docker.com/engine/install/ubuntu/
+```
+
+## 3. Enable GPU on docker(in case your service use GPU)
 Docker doesn’t even add GPUs to containers by default so a plain docker run won’t see your hardware at all. You need to configure it
 - Make sure you’ve got the NVIDIA drivers working properly on your host before you continue with your Docker configuration. You should be able to successfully run nvidia-smi and see your GPU’s name, driver version, and CUDA version
 - Adding the NVIDIA Container Toolkit to your host:
@@ -127,7 +133,7 @@ Reference:
 https://www.howtogeek.com/devops/how-to-use-an-nvidia-gpu-with-docker-containers/
 ```
 
-## 3. Run with docker
+## 4. Run with docker
 Build the image
 ```
 docker build -t age_transform -f docker/Dockerfile .

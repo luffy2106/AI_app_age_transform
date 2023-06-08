@@ -107,6 +107,7 @@ def main():
     
     # for each age transformed age, we'll concatenate the results to display them side-by-side
     results = np.array(aligned_image.resize((1024, 1024)))
+    os.makedirs('output', exist_ok=True)
 
     logger.info(f"Running on target age: {age_transformers.target_age}")
     with torch.no_grad():
