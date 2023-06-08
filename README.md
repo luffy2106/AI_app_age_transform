@@ -23,7 +23,7 @@ sudo wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh 
 
 1.2 Activate conda
 ```
-. conda/bin/activate
+. ~/conda/bin/activate
 ```
 1.3 Verify install:
 ```
@@ -37,7 +37,7 @@ conda env create -f environment/kien_env_37.yaml
 ```
 2. Activate virtual environment
 ```
-conda activate age_venv
+conda activate age_venv_37
 ```
 
 ### Download model
