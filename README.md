@@ -155,4 +155,5 @@ docker-compose up -d
 gunicorn scripts.main:app -w 1 --preload --timeout 180 -k uvicorn.workers.UvicornWorker -b "0.0.0.0:6080" 
 ```
 - If you bind port in docker compose file and set up command in docker compose, no need to set up in dockerfile anymore. 
-
+- If you use Uvicorn to run your AI service, you need to use BackgroundTasks in fastAPI to clear GPU memory after each request, if you use gunicorn, it was
+handled automatically
