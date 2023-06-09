@@ -18,7 +18,7 @@ from fastapi.responses import FileResponse
 from fastapi.templating import Jinja2Templates
 import os
 from fastapi.staticfiles import StaticFiles
-
+from fastapi import BackgroundTasks
 # Define Inference Parameters
 EXPERIMENT_DATA_ARGS = {
     "model_path": "./pretrained_models/sam_ffhq_aging.pt",
@@ -31,6 +31,8 @@ EXPERIMENT_DATA_ARGS = {
     ),
 }
 
+def gpu_memory_cleanup():
+    torch.cuda.empty_cache()
 
 def run_alignment(image_path, detect_face_config):
     """
@@ -102,7 +104,7 @@ async def upload(request: Request):
     status_code=status.HTTP_200_OK,
     response_class=HTMLResponse,
 )
-async def predict(request: Request, age: int = Form(...), file: UploadFile = File(...)):
+async def predict(background_tasks: BackgroundTasks,request: Request, age: int = Form(...), file: UploadFile = File(...)):
     """
     Predicts a class of an image
     """
@@ -139,7 +141,8 @@ async def predict(request: Request, age: int = Form(...), file: UploadFile = Fil
             result_image.save(file_path_output)
 
         logger.info(f"Time of inference {timeit.default_timer() - starttime}")
-
+        logger.info("clear GPU memory")
+        background_tasks.add_task(gpu_memory_cleanup)
         return templates.TemplateResponse(
             "result.html",
             {"request": request, "file_path": file_path_output, "number": age},
