@@ -2,16 +2,24 @@
 
 # For Development(Only apply for Linux or WSL2 window), skip it you want to deploy the project
 ### 1. Install cuda to enable GPU in WSL
+Remove old GPG key
+```
+sudo apt-key del 7fa2af80
+```
+Install cuda 
+```
 wget https://developer.download.nvidia.com/compute/cuda/repos/wsl-ubuntu/x86_64/cuda-keyring_1.0-1_all.deb
 sudo dpkg -i cuda-keyring_1.0-1_all.deb
 sudo apt-get update
 sudo apt-get -y install cuda
-
+```
 Checking:
 If you see cuda folder in usr/local, and you can see cuda version by the following command, then you are success:
 ```
 nvidia-smi
 ```
+
+Check the refence in this <a href="https://docs.nvidia.com/cuda/wsl-user-guide/index.html#getting-started-with-cuda-on-wsl-2" target="_blank">link</a>
 
 ### 2. Install conda
 Download and Install anaconda(mini version) 
@@ -103,10 +111,7 @@ wsl -l -v
 ```
 
 ## 2. Install docker
-Follow the tutorial in this link :
-```
-https://docs.docker.com/engine/install/ubuntu/
-```
+Follow the tutorial in this <a href="https://docs.docker.com/engine/install/ubuntu/" target="_blank">link</a>
 
 ## 3. Enable GPU on docker(in case your service use GPU)
 Docker doesn’t even add GPUs to containers by default so a plain docker run won’t see your hardware at all. You need to configure it
