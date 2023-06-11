@@ -139,6 +139,10 @@ https://www.howtogeek.com/devops/how-to-use-an-nvidia-gpu-with-docker-containers
 ```
 
 ## 4. Run with docker
+Remeber to turn on the docker:
+```
+sudo service docker start
+```
 Build the image
 ```
 docker build -t age_transform -f docker/Dockerfile .
